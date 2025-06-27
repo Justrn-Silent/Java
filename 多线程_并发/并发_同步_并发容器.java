@@ -1,0 +1,27 @@
+package 多线程_并发;
+
+import java.util.concurrent.CopyOnWriteArrayList;  //高级并发，自带锁
+
+public class 并发_同步_并发容器 {
+	public static void main(String[] args) throws InterruptedException {
+		list_T0 li= new list_T0();
+		for(int i=0;i<10000;i++) {
+		new Thread(li).start();
+		}
+		Thread.sleep(10);  //由于线程运行与main方法无关所以存在速度上的差异，对其进行适当阻塞u
+		System.out.println(li.list_1.size());
+	}
+	
+	
+}
+class list_T0 implements Runnable{
+	CopyOnWriteArrayList<String> list_1 =new CopyOnWriteArrayList<String>();
+	@Override
+	public void run() {
+			list_1.add(Thread.currentThread().getName());	
+			/*
+			 当数组容量不足时，ensureCapacityInternal()会触发扩容：
+					若线程A和线程B同时扩容，新数组可能被多次创建，导致部分数据丢失。
+			 */	
+	}
+}
